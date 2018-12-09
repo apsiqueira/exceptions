@@ -10,6 +10,11 @@ public class Reserva {
 	private Date checkout;
 	private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
+	public Reserva(Integer numQuarto) {
+
+		this.numQuarto = numQuarto;
+	}
+
 	public Reserva(Integer numQuarto, Date checkin, Date checkout) {
 		this.numQuarto = numQuarto;
 		this.checkin = checkin;
@@ -38,21 +43,21 @@ public class Reserva {
 
 	}
 
-	public void updateData(Date checkinAlteracao, Date checkoutAlteracao) {
+	public String updateData(Date checkin, Date checkout) {
 		Date agora = new Date();
-		if (checkinAlteracao.before(agora) || checkoutAlteracao.before(checkinAlteracao)) {
-			System.out.println("Erro na alteração da reserva");
+		if (checkin.before(agora) || checkout.before(agora)) {
+			return "Erro na da reserva, datas devem ser Futuras";
 
 		}
-		
-		else {
-			this.checkin = checkinAlteracao;
-			this.checkout = checkoutAlteracao;	
-			System.out.println("Alterção feita com sucesso");
-			
+
+		if (checkout.before(checkin)) {
+			return "Erro na data de Checkout";
+
 		}
 
-
+		this.checkin = checkin;
+		this.checkout = checkout;
+		return null;
 
 	}
 
