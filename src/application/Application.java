@@ -19,8 +19,6 @@ public class Application {
 
 		System.out.println("Entre com quarto");
 		Integer quarto = scan.nextInt();
-		
-		Reserva reserva = new Reserva(quarto);
 
 		System.out.println("Entre com a data de checkin :");
 		Date checkin = sdf.parse(scan.next());
@@ -28,7 +26,21 @@ public class Application {
 		System.out.println("Entre com a data de checkout :");
 		Date checkout = sdf.parse(scan.next());
 		
-		String error= reserva.updateData(checkin, checkout);
+		//apos estar funcionando criar uma programaçao defensiva para instanciar o objeto 
+		Reserva reserva = new Reserva(quarto,checkin,checkout);
+		
+		System.out.println("Dados da reserva");
+		System.out.println(reserva.toString());
+		
+		System.out.println("entre com a data para alteração da reserva");
+		
+		System.out.println("Entre com a data de checkin :");
+		Date checkinAlteracao = sdf.parse(scan.next());
+
+		System.out.println("Entre com a data de checkout :");
+		Date checkoutAlteracao = sdf.parse(scan.next());
+		
+		String error= reserva.updateData(checkinAlteracao, checkoutAlteracao);
 		
 		if (error!=null) {
 			System.out.println(error);

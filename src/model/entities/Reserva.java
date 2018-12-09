@@ -9,16 +9,21 @@ public class Reserva {
 	private Date checkin;
 	private Date checkout;
 	private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-
-	public Reserva(Integer numQuarto) {
-
-		this.numQuarto = numQuarto;
-	}
+	private static Date agora = new Date();
 
 	public Reserva(Integer numQuarto, Date checkin, Date checkout) {
-		this.numQuarto = numQuarto;
-		this.checkin = checkin;
-		this.checkout = checkout;
+		String dataCorreta = checarDatas(checkin, checkout);
+		if(dataCorreta==null) {
+			this.numQuarto = numQuarto;
+			this.checkin = checkin;
+			this.checkout = checkout;
+		}
+		else {
+			System.out.println(dataCorreta);
+			
+		}
+
+	
 	}
 
 	public Integer getNumQuarto() {
@@ -43,15 +48,26 @@ public class Reserva {
 
 	}
 
+	public String checarDatas(Date checkin, Date checkout) {
+		if (checkin.before(agora) && checkout.before(agora)) {
+			return "Datas para reservas devem ser futuras";
+
+		} else {
+			return null;
+		}
+
+	}
+
 	public String updateData(Date checkin, Date checkout) {
-		Date agora = new Date();
-		if (checkin.before(agora) || checkout.before(agora)) {
-			return "Erro na da reserva, datas devem ser Futuras";
+
+		if (checkin.before(this.checkin)) {
+			return "Erro na da reserva, datas devem ser Futuras, para esta opreção deve usar antecipação de reserva "
+					+ "caso haja vaga em aberto no hotel ou desistencia";
 
 		}
 
 		if (checkout.before(checkin)) {
-			return "Erro na data de Checkout";
+			return "Erro na data de Checkout o mesmo deve ser apos a data de Checkin";
 
 		}
 
