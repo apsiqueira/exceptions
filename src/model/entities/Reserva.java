@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import model.exceptions.DomainExceptions;
+
 public class Reserva {
 	private Integer numQuarto;
 	private Date checkin;
@@ -11,19 +13,10 @@ public class Reserva {
 	private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 	private static Date agora = new Date();
 
-	public Reserva(Integer numQuarto, Date checkin, Date checkout) {
-		String dataCorreta = checarDatas(checkin, checkout);
-		if(dataCorreta==null) {
-			this.numQuarto = numQuarto;
-			this.checkin = checkin;
-			this.checkout = checkout;
-		}
-		else {
-			System.out.println(dataCorreta);
-			
-		}
+	public Reserva(Integer numQuarto, Date checkin, Date checkout) throws DomainExceptions {
+		checarDatas(checkin, checkout);
+		this.numQuarto = numQuarto;
 
-	
 	}
 
 	public Integer getNumQuarto() {
@@ -48,39 +41,39 @@ public class Reserva {
 
 	}
 
-	public String checarDatas(Date checkin, Date checkout) {
+	public void checarDatas(Date checkin, Date checkout) throws DomainExceptions {
 		if (checkin.before(agora) && checkout.before(agora)) {
-			return "Datas para reservas devem ser futuras";
+			throw new DomainExceptions("Datas para reservas devem ser futuras");
 
-		} else {
-			return null;
 		}
+		this.checkin = checkin;
+		this.checkout = checkout;
 
 	}
 
-	public String updateData(Date checkin, Date checkout) {
+	public void updateData(Date checkin, Date checkout) throws DomainExceptions {
 
 		if (checkin.before(this.checkin)) {
-			return "Erro na da reserva, datas devem ser Futuras, para esta opreção deve usar antecipação de reserva "
-					+ "caso haja vaga em aberto no hotel ou desistencia";
+			throw new DomainExceptions(
+					"Erro na da reserva, datas devem ser Futuras, para esta opreção deve usar antecipação de reserva "
+							+ "caso haja vaga em aberto no hotel ou desistencia");
 
 		}
 
 		if (checkout.before(checkin)) {
-			return "Erro na data de Checkout o mesmo deve ser apos a data de Checkin";
+			throw new DomainExceptions("Erro na data de Checkout o mesmo deve ser apos a data de Checkin");
 
 		}
 
 		this.checkin = checkin;
 		this.checkout = checkout;
-		return null;
 
 	}
 
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("Reserva [numQuarto=");
+		builder.append("Reserva : numQuarto=");
 		builder.append(numQuarto);
 		builder.append(", checkin=");
 		builder.append(sdf.format(this.checkin));
